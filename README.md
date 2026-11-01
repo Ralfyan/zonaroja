@@ -9,5 +9,7 @@ HTML, CSS y JavaScript sin nada que instalar. Se publica sola con GitHub Pages c
 - `style.css`: colores y diseño.
 - Cada página es un `.html` (index, horarios, donde-ver, madrid, equipos, test, novatos, comunidad).
 
+**¿Quieres editarla? Lee [COMO-EDITAR.md](COMO-EDITAR.md).**
+
 ## Cómo ver los cambios en tu ordenador
 Abre `index.html` con doble clic.
