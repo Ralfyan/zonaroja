@@ -74,8 +74,8 @@ const PARTIDOS = [
 // ---------- DATOS: franjas horarias habituales (hora de Nueva York) ----------
 const FRANJAS = [
   { dia: 0, horaET: "13:00", nombre: "Primera tanda del domingo", veredicto: "ok", txt: "Ideal: después de comer" },
-  { dia: 0, horaET: "16:05", nombre: "Segunda tanda del domingo", veredicto: "ok", txt: "Perfecto para la cena" },
-  { dia: 0, horaET: "16:25", nombre: "Partido estelar de la tarde", veredicto: "ok", txt: "Perfecto para la cena" },
+  // Misma franja: unos partidos empiezan a las 16:05 y otros a las 16:25 (hora de Nueva York) según la cadena de TV
+  { dia: 0, horaET: "16:05", alt: "16:25", nombre: "Segunda tanda del domingo", veredicto: "ok", txt: "Perfecto para la cena" },
   { dia: 0, horaET: "20:20", nombre: "Sunday Night Football", veredicto: "mal", txt: "Madrugada: mejor en diferido" },
   { dia: 1, horaET: "20:15", nombre: "Monday Night Football", veredicto: "mal", txt: "Madrugada: mejor en diferido" },
   { dia: 4, horaET: "20:15", nombre: "Thursday Night Football", veredicto: "mal", txt: "Madrugada: mejor en diferido" },
@@ -180,10 +180,10 @@ function pintarProximaJornada(idTabla = "proxima-jornada", idAviso = "aviso-camb
   const domingo = sumarDias(hoyNY, (7 - dow) % 7);
   const filas = FRANJAS.map(f => {
     const fecha = f.dia === 0 ? domingo : f.dia === 1 ? sumarDias(domingo, 1) : sumarDias(domingo, 4);
-    return { ...f, t: desdeNuevaYork(fecha, f.horaET) };
+    return { ...f, t: desdeNuevaYork(fecha, f.horaET), t2: f.alt ? desdeNuevaYork(fecha, f.alt) : null };
   }).sort((a, b) => a.t - b.t);
   tb.innerHTML = filas.map(f => `
-    <tr><td><span class="hora">${horaMadrid(f.t)}</span></td>
+    <tr><td><span class="hora">${horaMadrid(f.t)}${f.t2 ? " / " + horaMadrid(f.t2) : ""}</span></td>
       <td><strong>${f.nombre}</strong><br><span class="muted">${enMadrid(f.t, { weekday: "long", day: "numeric", month: "long" })}</span></td>
       <td><span class="tag ${f.veredicto}">${f.txt}</span></td></tr>`).join("");
   const dif = diferenciaHoras(filas[0].t);
