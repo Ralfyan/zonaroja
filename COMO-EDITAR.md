@@ -7,6 +7,25 @@ Esta web es tuya. Aquí tienes todo lo que necesitas para cambiarla, ampliarla y
 
 ---
 
+## ⭐ La forma fácil: una hoja de cálculo (sin tocar código)
+
+**Lo normal del día a día no requiere programar nada.** Los partidos destacados, las novedades de la portada, los bares y las peñas se cambian desde una hoja de cálculo de Google, también desde el móvil. Lo que escribes ahí aparece solo en la web.
+
+**Preparación (una sola vez, con ayuda de tu tío):**
+1. Sube el archivo `ZonaRoja-contenido.xlsx` a Google Drive y ábrelo con **Hojas de cálculo de Google** (Archivo → Guardar como hoja de cálculo de Google).
+2. Pulsa **Compartir** → "Acceso general" → **"Cualquier persona con el enlace"** → **Lector**.
+3. Copia la dirección de la hoja. Es algo como `https://docs.google.com/spreadsheets/d/ESTE-TROZO-LARGO/edit`.
+4. En GitHub, abre `app.js`, pulsa el lápiz ✏️ y pega **ESTE-TROZO-LARGO** entre las comillas de `const HOJA_ID = "";` (casi al principio). Guarda con "Commit changes".
+
+**A partir de ahí, solo usas la hoja:**
+- **Partidos:** fecha (15/11/2026), hora de España (19:00) y equipos por su apodo (Chiefs, Bills…). El más próximo sale en la cuenta atrás de la portada.
+- **Novedades:** las noticias de la portada. Pon arriba la más nueva.
+- **Bares** y **Penas:** las tablas de la página Comunidad.
+
+No cambies los nombres de las pestañas ni la primera fila.
+
+---
+
 ## 1. Lo que necesitas (todo gratis)
 
 | Herramienta | Para qué | ¿Obligatoria? |
@@ -34,7 +53,7 @@ Para empezar **solo necesitas una cuenta de GitHub**. Cuando la tengas, pásale 
 
 ---
 
-## 3. Tu primer cambio (5 minutos, sin instalar nada)
+## 3. Para cuando te animes: tu primer cambio en el código (5 minutos)
 
 Vamos a añadir un partido a la tabla de "Partidos con sabor español":
 

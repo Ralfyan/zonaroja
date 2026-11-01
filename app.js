@@ -3,6 +3,11 @@
    Todo lo que haya que actualizar está en los bloques de DATOS.
    ========================================================= */
 
+// ---------- CONFIGURACIÓN: hoja de cálculo de Google ----------
+// Pega aquí el identificador de la hoja (lo que va entre /d/ y /edit en su dirección).
+// Si está vacío, la web usa solo los datos de este archivo.
+const HOJA_ID = "";
+
 // ---------- DATOS: menú ----------
 const MENU = [
   ["index.html", "Inicio"],
@@ -79,15 +84,21 @@ const FRANJAS = [
 /* =========================================================
    UTILIDADES DE HORA
    ========================================================= */
-function desdeNuevaYork(fecha, hora) {
+// Convierte una fecha y hora "de pared" de una zona horaria en un instante real
+function desdeZona(fecha, hora, zona, offsets) {
   const [a, m, d] = fecha.split("-").map(Number);
   const [h, min] = hora.split(":").map(Number);
-  for (const off of [4, 5]) {
-    const t = new Date(Date.UTC(a, m - 1, d, h + off, min));
-    if (t.toLocaleString("sv-SE", { timeZone: "America/New_York" }).slice(0, 16) === `${fecha} ${hora}`) return t;
+  const objetivo = `${fecha} ${String(h).padStart(2, "0")}:${String(min).padStart(2, "0")}`;
+  for (const off of offsets) {
+    const t = new Date(Date.UTC(a, m - 1, d, h - off, min));
+    if (t.toLocaleString("sv-SE", { timeZone: zona }).slice(0, 16) === objetivo) return t;
   }
-  return new Date(Date.UTC(a, m - 1, d, h + 5, min));
+  return new Date(Date.UTC(a, m - 1, d, h - offsets[0], min));
 }
+const desdeNuevaYork = (f, h) => desdeZona(f, h, "America/New_York", [-5, -4]);
+const desdeMadrid = (f, h) => desdeZona(f, h, "Europe/Madrid", [1, 2]);
+// Un partido puede llevar la hora de Nueva York (horaET) o la de España (horaES, la de la hoja)
+const momento = p => p.horaES ? desdeMadrid(p.fecha, p.horaES) : desdeNuevaYork(p.fecha, p.horaET);
 const enMadrid = (t, o = {}) => t.toLocaleString("es-ES", { timeZone: "Europe/Madrid", ...o });
 const horaMadrid = t => enMadrid(t, { hour: "2-digit", minute: "2-digit" });
 function offset(t, zona) {
@@ -98,7 +109,12 @@ function offset(t, zona) {
 const diferenciaHoras = t => offset(t, "Europe/Madrid") - offset(t, "America/New_York");
 function fechaNY(t) { return t.toLocaleString("sv-SE", { timeZone: "America/New_York" }).slice(0, 10); }
 function sumarDias(fecha, n) { const d = new Date(fecha + "T12:00:00Z"); d.setUTCDate(d.getUTCDate() + n); return d.toISOString().slice(0, 10); }
-const equipo = n => EQUIPOS.find(e => e.n === n);
+function equipo(n) {
+  const q = String(n || "").toLowerCase().trim();
+  return EQUIPOS.find(e => e.n.toLowerCase() === q) ||
+    EQUIPOS.find(e => q.includes(e.n.toLowerCase())) ||
+    { n: n || "?", ciudad: "", c1: "#5b6b7c" };
+}
 
 /* =========================================================
    CABECERA Y PIE
@@ -125,8 +141,9 @@ function pintarCabecera() {
 function pintarMarcador(id, p) {
   const el = document.getElementById(id);
   if (!el) return;
+  if (!p) return;
   const L = equipo(p.local), V = equipo(p.visitante);
-  const t = desdeNuevaYork(p.fecha, p.horaET);
+  const t = momento(p);
   el.innerHTML = `
     <div class="equipos">
       <span class="chip-equipo"><i style="background:${V.c1}"></i>${V.n}</span>
@@ -139,9 +156,11 @@ function pintarMarcador(id, p) {
       <div><strong data-u="m">00</strong><span>min</span></div>
       <div><strong data-u="s">00</strong><span>seg</span></div>
     </div>
-    <div class="info">${enMadrid(t, { weekday: "long", day: "numeric", month: "long" })} · ${horaMadrid(t)} · ${p.lugar}</div>`;
+    <div class="info">${enMadrid(t, { weekday: "long", day: "numeric", month: "long" })} · ${horaMadrid(t)}${p.lugar ? " · " + p.lugar : ""}</div>`;
   const set = (u, v) => el.querySelector(`[data-u="${u}"]`).textContent = String(v).padStart(2, "0");
+  const gen = el.dataset.gen = String(Number(el.dataset.gen || 0) + 1);
   (function tic() {
+    if (el.dataset.gen !== gen) return;
     const ms = Math.max(0, t - new Date());
     set("d", Math.floor(ms / 864e5)); set("h", Math.floor(ms / 36e5) % 24);
     set("m", Math.floor(ms / 6e4) % 60); set("s", Math.floor(ms / 1e3) % 60);
@@ -188,12 +207,15 @@ function iniciarConversor() {
 function pintarPartidos() {
   const tb = document.getElementById("tabla-partidos");
   if (!tb) return;
-  tb.innerHTML = PARTIDOS.map(p => {
-    const t = desdeNuevaYork(p.fecha, p.horaET), L = equipo(p.local), V = equipo(p.visitante);
+  const ayer = Date.now() - 864e5;
+  const lista = PARTIDOS.filter(p => momento(p) > ayer).sort((a, b) => momento(a) - momento(b));
+  if (!lista.length) { tb.innerHTML = `<tr><td class="muted">No hay partidos destacados próximos.</td></tr>`; return; }
+  tb.innerHTML = lista.map(p => {
+    const t = momento(p), L = equipo(p.local), V = equipo(p.visitante);
     return `<tr><td><span class="hora">${horaMadrid(t)}</span><br><span class="muted">${enMadrid(t, { weekday: "short", day: "numeric", month: "short" })}</span></td>
       <td><span class="chip-equipo"><i style="background:${V.c1}"></i>${V.ciudad} ${V.n}</span> en
-          <span class="chip-equipo"><i style="background:${L.c1}"></i>${L.ciudad} ${L.n}</span><br><span class="muted">${p.lugar}</span></td>
-      <td><span class="tag ok">${p.nota}</span></td></tr>`;
+          <span class="chip-equipo"><i style="background:${L.c1}"></i>${L.ciudad} ${L.n}</span><br><span class="muted">${p.lugar || ""}</span></td>
+      <td>${p.nota ? `<span class="tag ok">${p.nota}</span>` : ""}</td></tr>`;
   }).join("");
 }
 
@@ -346,11 +368,85 @@ function iniciarFormulario() {
   });
 }
 
+/* =========================================================
+   HOJA DE CÁLCULO DE GOOGLE (contenido editable sin programar)
+   ========================================================= */
+const MADRID_2026 = PARTIDOS[0];
+const proximoPartido = () =>
+  [...PARTIDOS].filter(p => momento(p) > Date.now()).sort((a, b) => momento(a) - momento(b))[0] || MADRID_2026;
+
+function parseCSV(txt) {
+  const filas = []; let fila = [], campo = "", comillas = false;
+  for (let i = 0; i < txt.length; i++) {
+    const c = txt[i];
+    if (comillas) {
+      if (c === '"' && txt[i + 1] === '"') { campo += '"'; i++; }
+      else if (c === '"') comillas = false;
+      else campo += c;
+    } else if (c === '"') comillas = true;
+    else if (c === ",") { fila.push(campo); campo = ""; }
+    else if (c === "\n" || c === "\r") {
+      if (c === "\r" && txt[i + 1] === "\n") i++;
+      fila.push(campo); filas.push(fila); fila = []; campo = "";
+    } else campo += c;
+  }
+  if (campo || fila.length) { fila.push(campo); filas.push(fila); }
+  const cab = (filas.shift() || []).map(c => c.trim().toLowerCase());
+  return filas.filter(f => f.some(x => x.trim())).map(f => Object.fromEntries(cab.map((c, i) => [c, (f[i] || "").trim()])));
+}
+async function leerPestana(nombre) {
+  const url = `https://docs.google.com/spreadsheets/d/${HOJA_ID}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(nombre)}`;
+  const r = await fetch(url);
+  if (!r.ok) throw new Error(nombre);
+  return parseCSV(await r.text());
+}
+// Acepta 8/11/2026, 08/11/2026 o 2026-11-08
+function fechaISO(txt) {
+  let m = txt.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);
+  if (m) return `${m[1]}-${m[2].padStart(2, "0")}-${m[3].padStart(2, "0")}`;
+  m = txt.match(/^(\d{1,2})[\/.-](\d{1,2})[\/.-](\d{2,4})/);
+  if (m) return `${m[3].length === 2 ? "20" + m[3] : m[3]}-${m[2].padStart(2, "0")}-${m[1].padStart(2, "0")}`;
+  return null;
+}
+function horaHM(txt) { const m = String(txt).match(/(\d{1,2})[:.h](\d{2})/); return m ? `${m[1].padStart(2, "0")}:${m[2]}` : null; }
+const escapar = t => String(t || "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const enlace = (url, txt) => /^https?:\/\//.test(url || "") ? `<a href="${escapar(url)}" target="_blank" rel="noopener">${txt}</a>` : "";
+
+function pintarNovedades(lista) {
+  const el = document.getElementById("novedades");
+  if (!el || !lista.length) return;
+  el.innerHTML = `<h2>Novedades</h2><div class="grid">${lista.slice(0, 6).map(n => `
+    <div class="card"><div class="muted" style="font-size:.85rem">${escapar(n.fecha)}</div>
+      <h3>${escapar(n.titulo)}</h3><p class="muted">${escapar(n.texto)}</p>${enlace(n.enlace, "Leer más →")}</div>`).join("")}</div>`;
+}
+function pintarTablaComunidad(id, lista, columnas) {
+  const tb = document.getElementById(id);
+  if (!tb || !lista.length) return;
+  tb.innerHTML = lista.map(f => `<tr>${columnas.map(c => `<td>${c === "enlace" ? enlace(f.enlace, "Ver →") : escapar(f[c])}</td>`).join("")}</tr>`).join("");
+}
+
+async function cargarHoja() {
+  if (!HOJA_ID) return;
+  const leer = n => leerPestana(n).catch(() => []);
+  const [partidos, novedades, bares, penas] = await Promise.all([leer("Partidos"), leer("Novedades"), leer("Bares"), leer("Penas")]);
+  partidos.forEach(f => {
+    const fecha = fechaISO(f.fecha || ""), hora = horaHM(f["hora españa"] || f["hora espana"] || f.hora || "");
+    const repetido = PARTIDOS.some(p => p.fecha === fecha && equipo(p.local).n === equipo(f.local).n);
+    if (fecha && hora && f.local && f.visitante && !repetido)
+      PARTIDOS.push({ fecha, horaES: hora, local: f.local, visitante: f.visitante, lugar: f.lugar, nota: f.nota });
+  });
+  pintarMarcador("marcador", proximoPartido());
+  pintarPartidos();
+  pintarNovedades(novedades);
+  pintarTablaComunidad("tabla-bares", bares, ["ciudad", "bar", "que ponen", "enlace"]);
+  pintarTablaComunidad("tabla-penas", penas, ["equipo", "nombre", "ciudad", "enlace"]);
+}
+
 /* ========================================================= */
 document.addEventListener("DOMContentLoaded", () => {
   pintarCabecera();
-  pintarMarcador("marcador", PARTIDOS[0]);
-  pintarMarcador("marcador-madrid", PARTIDOS[0]);
+  pintarMarcador("marcador", proximoPartido());
+  pintarMarcador("marcador-madrid", MADRID_2026);
   pintarProximaJornada();
   pintarProximaJornada("proxima-jornada-h", "aviso-cambio-h");
   iniciarConversor();
@@ -361,4 +457,5 @@ document.addEventListener("DOMContentLoaded", () => {
   pintarGlosario();
   const b = document.getElementById("buscar"); if (b) b.oninput = () => pintarGlosario(b.value);
   iniciarFormulario();
+  cargarHoja();
 });
