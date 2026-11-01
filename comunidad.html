@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Comunidad NFL en España · ZonaRoja</title>
+<link rel="stylesheet" href="style.css">
+<script src="app.js" defer></script>
+</head>
+<body>
+<div id="cabecera"></div>
+<main class="wrap">
+  <h1 style="margin-top:2rem">Fútbol americano en España</h1>
+  <p class="lead muted" style="max-width:720px">La NFL se ve en la tele, pero el fútbol americano también se juega aquí. Y cada vez hay más gente con quien verlo.</p>
+
+  <h2>Equipos de aquí</h2>
+  <div class="grid">
+    <div class="card destacada"><span class="icono">🦅</span><h3>Madrid Bravos</h3><p class="muted">Franquicia profesional creada en 2023 para la European League of Football (ELF). Juegan en Vallehermoso y han pasado de unos 1.000 a unos 3.000 aficionados por partido.</p></div>
+    <div class="card"><span class="icono">🐉</span><h3>Barcelona Dragons</h3><p class="muted">Recuperaron en la ELF el nombre del mítico equipo de la NFL Europa de los 90.</p></div>
+    <div class="card"><span class="icono">🇪🇸</span><h3>Liga Nacional (LNFA)</h3><p class="muted">La liga española, con unos diez equipos en la máxima categoría. Se juega de enero a mayo, cuando la NFL ya ha terminado.</p></div>
+    <div class="card"><span class="icono">🏃</span><h3>¿Quieres jugar?</h3><p class="muted">Casi todas las ciudades grandes tienen club con equipos de base y de flag football (sin placajes). La federación es la FEFA.</p></div>
+  </div>
+
+  <h2>Dónde verlo con más gente</h2>
+  <div class="grid-2">
+    <div class="card"><h3>📍 Bares NFL</h3><p class="muted">Estamos montando un mapa de bares que ponen los partidos del domingo y la Super Bowl, empezando por Barcelona y Madrid. Si conoces uno, mándanoslo abajo.</p></div>
+    <div class="card"><h3>👥 Peñas de equipos</h3><p class="muted">Muchos equipos tienen peña de aficionados españoles en redes sociales. Las iremos listando una por una, comprobando que estén activas.</p></div>
+  </div>
+
+  <h2>Mándanos tu bar o tu peña</h2>
+  <form class="card" id="form-comunidad" style="max-width:640px">
+    <label for="tipo">¿Qué nos mandas?</label>
+    <select id="tipo"><option>Un bar donde ponen la NFL</option><option>Una peña de aficionados</option><option>Un club de fútbol americano</option></select>
+    <label for="nombre-sitio">Nombre</label><input id="nombre-sitio" required placeholder="Ej.: Bar El Touchdown">
+    <label for="ciudad">Ciudad</label><input id="ciudad" required placeholder="Ej.: Barcelona">
+    <label for="enlace">Enlace o red social (opcional)</label><input id="enlace" placeholder="https://…">
+    <p class="muted" style="font-size:.82rem">No pedimos tu nombre ni tu correo.</p>
+    <button type="submit">Enviar</button>
+    <div id="form-ok"></div>
+  </form>
+</main>
+<div id="pie"></div>
+</body>
+</html>

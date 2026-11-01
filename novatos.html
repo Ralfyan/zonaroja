@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>La NFL para novatos · ZonaRoja</title>
+<link rel="stylesheet" href="style.css">
+<script src="app.js" defer></script>
+</head>
+<body>
+<div id="cabecera"></div>
+<main class="wrap">
+  <h1 style="margin-top:2rem">La NFL para novatos</h1>
+  <p class="lead muted" style="max-width:720px">Si vienes del fútbol, en cinco minutos entiendes un partido. Lo demás se aprende viéndolo.</p>
+
+  <h2>El campo</h2>
+  <div class="card" style="padding:0;overflow:hidden">
+    <svg viewBox="0 0 1200 420" width="100%" role="img" aria-label="Esquema de un campo de fútbol americano">
+      <rect width="1200" height="420" fill="#1c6a3c"/>
+      <rect x="0" y="0" width="100" height="420" fill="#A71930"/><rect x="1100" y="0" width="100" height="420" fill="#FB4F14"/>
+      <text x="50" y="215" fill="#fff" font-family="Oswald" font-size="26" text-anchor="middle" transform="rotate(-90 50 210)">ZONA DE ANOTACIÓN</text>
+      <text x="1150" y="215" fill="#fff" font-family="Oswald" font-size="26" text-anchor="middle" transform="rotate(90 1150 210)">ZONA DE ANOTACIÓN</text>
+      <g stroke="#fff" stroke-opacity=".7" stroke-width="2">
+        <line x1="100" y1="0" x2="100" y2="420"/><line x1="200" y1="0" x2="200" y2="420"/><line x1="300" y1="0" x2="300" y2="420"/><line x1="400" y1="0" x2="400" y2="420"/><line x1="500" y1="0" x2="500" y2="420"/><line x1="600" y1="0" x2="600" y2="420" stroke-width="4"/><line x1="700" y1="0" x2="700" y2="420"/><line x1="800" y1="0" x2="800" y2="420"/><line x1="900" y1="0" x2="900" y2="420"/><line x1="1000" y1="0" x2="1000" y2="420"/><line x1="1100" y1="0" x2="1100" y2="420"/>
+      </g>
+      <g fill="#fff" font-family="Oswald" font-size="28" text-anchor="middle" opacity=".85">
+        <text x="200" y="390">10</text><text x="300" y="390">20</text><text x="400" y="390">30</text><text x="500" y="390">40</text><text x="600" y="390">50</text><text x="700" y="390">40</text><text x="800" y="390">30</text><text x="900" y="390">20</text><text x="1000" y="390">10</text>
+      </g>
+      <rect x="900" y="0" width="200" height="420" fill="#e8443a" opacity=".28"/>
+      <text x="1000" y="45" fill="#fff" font-family="Oswald" font-size="24" text-anchor="middle">ZONA ROJA</text>
+      <line x1="560" y1="40" x2="560" y2="340" stroke="#4da3ff" stroke-width="5"/><text x="548" y="70" fill="#9fd0ff" font-family="Inter" font-size="17" text-anchor="end" font-weight="700">línea de scrimmage</text>
+      <line x1="660" y1="40" x2="660" y2="340" stroke="#f5c04a" stroke-width="5"/><text x="672" y="70" fill="#f5c04a" font-family="Inter" font-size="17" text-anchor="start" font-weight="700">objetivo: 10 yardas</text>
+      <ellipse cx="560" cy="190" rx="16" ry="10" fill="#8a3b1c" stroke="#fff"/>
+      <path d="M580 190 L640 190" stroke="#f5c04a" stroke-width="3" marker-end="url(#f)"/>
+      <defs><marker id="f" markerWidth="10" markerHeight="10" refX="6" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#f5c04a"/></marker></defs>
+    </svg>
+  </div>
+  <p class="muted">100 yardas (unos 91 metros) entre zonas de anotación. El ataque tiene 4 intentos para avanzar 10 yardas: si lo consigue, vuelve a tener 4.</p>
+
+  <h2>En 5 ideas</h2>
+  <div class="grid">
+    <div class="card"><span class="num">1</span><h3 style="margin-top:.4rem">Por turnos</h3><p class="muted">No es un juego continuo: cada jugada dura unos segundos, se para y se planea la siguiente. Como el ajedrez, pero con placajes.</p></div>
+    <div class="card"><span class="num">2</span><h3 style="margin-top:.4rem">4 intentos, 10 yardas</h3><p class="muted">Si al cuarto intento no llegas, el balón es del rival. Por eso en el cuarto casi siempre se patea.</p></div>
+    <div class="card"><span class="num">3</span><h3 style="margin-top:.4rem">Puntos</h3><p class="muted">Touchdown 6 (+1 o +2 después), field goal 3, safety 2.</p></div>
+    <div class="card"><span class="num">4</span><h3 style="margin-top:.4rem">Tres equipos en uno</h3><p class="muted">Uno ataca, otro defiende y otro hace las patadas. Cambios ilimitados.</p></div>
+    <div class="card"><span class="num">5</span><h3 style="margin-top:.4rem">El reloj se para</h3><p class="muted">60 minutos de juego, pero un partido dura unas 3 horas.</p></div>
+  </div>
+
+  <h2>Glosario, con traducción al fútbol</h2>
+  <input id="buscar" type="search" placeholder="Busca: sack, quarterback, zona roja…" style="margin-bottom:1rem">
+  <div class="glosario" id="glosario"></div>
+</main>
+<div id="pie"></div>
+</body>
+</html>

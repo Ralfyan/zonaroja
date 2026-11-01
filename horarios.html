@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Horarios NFL en hora española · ZonaRoja</title>
+<link rel="stylesheet" href="style.css">
+<script src="app.js" defer></script>
+</head>
+<body>
+<div id="cabecera"></div>
+<main class="wrap">
+  <h1 style="margin-top:2rem">Horarios en hora española</h1>
+  <p class="lead muted" style="max-width:720px">La NFL publica todo en hora de Nueva York. Normalmente hay que sumar <strong style="color:#fff">6 horas</strong>, pero dos veces al año hay una semana trampa. Aquí lo tienes hecho.</p>
+
+  <h2>Esta semana</h2>
+  <div id="aviso-cambio-h"></div>
+  <div class="scroll-x"><table class="tabla"><thead><tr><th>Hora en España</th><th>Franja</th><th>¿Se puede ver?</th></tr></thead><tbody id="proxima-jornada-h"></tbody></table></div>
+
+  <h2>Partidos con sabor español</h2>
+  <div class="scroll-x"><table class="tabla"><thead><tr><th>Hora</th><th>Partido</th><th></th></tr></thead><tbody id="tabla-partidos"></tbody></table></div>
+
+  <h2 id="conversor">Conversor</h2>
+  <div class="grid-2">
+    <div class="card">
+      <label for="conv-fecha">Fecha del partido</label><input type="date" id="conv-fecha">
+      <label for="conv-hora">Hora en Nueva York (ET), como sale en NFL.com</label><input type="time" id="conv-hora" value="13:00">
+      <div class="resultado" id="conv-resultado"></div>
+    </div>
+    <div class="card">
+      <h3>La semana trampa del cambio de hora</h3>
+      <p>España cambia la hora el <strong>último domingo de marzo y de octubre</strong>. EE. UU. lo hace el <strong>segundo domingo de marzo y el primer domingo de noviembre</strong>.</p>
+      <p>Entre una fecha y otra, la diferencia es de <strong>5 horas</strong>: el partido de las 19:00 empieza a las 18:00. Cada año hay aficionados que se pierden la primera parte por esto.</p>
+    </div>
+  </div>
+
+  <h2>Trucos para no dormirte</h2>
+  <div class="grid">
+    <div class="card"><span class="icono">🌙</span><h3>Los nocturnos, en diferido</h3><p class="muted">Sunday, Monday y Thursday Night acaban sobre las 5:30 de la mañana. Con Game Pass puedes verlos al día siguiente sin saber el resultado.</p></div>
+    <div class="card"><span class="icono">🙈</span><h3>Modo sin spoilers</h3><p class="muted">Silencia las notificaciones de las apps deportivas y las palabras clave en redes antes de acostarte.</p></div>
+    <div class="card"><span class="icono">⏱️</span><h3>Partidos condensados</h3><p class="muted">Un partido completo dura unas 3 horas, pero en versión condensada se ve en unos 40 minutos.</p></div>
+  </div>
+</main>
+<div id="pie"></div>
+</body>
+</html>
