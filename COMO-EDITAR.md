@@ -17,7 +17,9 @@ Esta web es tuya. Aquí tienes todo lo que necesitas para cambiarla, ampliarla y
 | **Visual Studio Code** (code.visualstudio.com) | Editor de código cómodo, con colores | Más adelante |
 | **Claude** (claude.ai) | Pedirle ayuda: "añade una página de…", "¿por qué no funciona…?" | Muy recomendable |
 
-Para empezar **solo necesitas una cuenta de GitHub**. Cuando la tengas, pásale tu nombre de usuario a tu tío para que te dé permiso de edición.
+Para empezar **solo necesitas una cuenta de GitHub**. Cuando la tengas, pásale tu nombre de usuario a tu tío: te transferirá el proyecto y será **100 % tuyo**. Te llegará un correo de GitHub para aceptarlo.
+
+> Cuando el proyecto pase a tu cuenta, las direcciones cambian: la web estará en `https://TU-USUARIO.github.io/zonaroja/` y el código en `https://github.com/TU-USUARIO/zonaroja`. Después de aceptar, entra en *Settings → Pages* y comprueba que sigue marcado **main** y **/ (root)**.
 
 > GitHub exige tener al menos 13 años para abrir una cuenta.
 
@@ -36,7 +38,7 @@ Para empezar **solo necesitas una cuenta de GitHub**. Cuando la tengas, pásale 
 
 Vamos a añadir un partido a la tabla de "Partidos con sabor español":
 
-1. Entra en https://github.com/Ralfyan/zonaroja y abre el archivo **`app.js`**.
+1. Entra en tu repositorio `zonaroja` en GitHub y abre el archivo **`app.js`**.
 2. Pulsa el **lápiz** ✏️ de arriba a la derecha.
 3. Busca `const PARTIDOS = [`. Verás algo así:
    ```js
